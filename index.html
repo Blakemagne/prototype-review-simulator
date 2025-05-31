@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review Rating Analyzer</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8f9fa;
+      color: #1a1a1a;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    /* Onboarding Screen */
+    .onboarding-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .onboarding-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 48px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .logo {
+      font-size: 72px;
+      margin-bottom: 24px;
+    }
+    
+    .app-title {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .app-subtitle {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 32px;
+    }
+    
+    .features-list {
+      text-align: left;
+      margin: 32px 0;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-size: 16px;
+    }
+    
+    .feature-check {
+      color: #4caf50;
+      font-size: 20px;
+    }
+    
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 32px;
+    }
+    
+    .connect-btn, .demo-btn {
+      padding: 16px 32px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    
+    .connect-btn {
+      background: #4285f4;
+      color: white;
+    }
+    
+    .connect-btn:hover {
+      background: #3367d6;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+    }
+    
+    .demo-btn {
+      background: #f8f9fa;
+      color: #666;
+      border: 2px solid #e0e0e0;
+    }
+    
+    .demo-btn:hover {
+      background: #e0e0e0;
+      border-color: #ccc;
+    }
+    
+    /* Main App */
+    .main-app {
+      display: none;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .main-app.active {
+      display: block;
+    }
+    
+    /* Header */
+    .header {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .demo-badge {
+      background: #ffc107;
+      color: #000;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    .exit-btn {
+      padding: 8px 16px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    
+    .exit-btn:hover {
+      background: #5a67d8;
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .stat-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 4px;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    /* Main Grid */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    
+    @media (max-width: 1024px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .card h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    
+    /* Chart Container */
+    #chart-container {
+      height: 400px;
+      background: #fafafa;
+      border-radius: 8px;
+      padding: 16px;
+      position: relative;
+    }
+    
+    .time-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    
+    .time-btn {
+      padding: 6px 12px;
+      background: #f0f0f0;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .time-btn.active {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+    
+    /* Simulator Section */
+    .simulator-section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .scale-selector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    
+    .scale-selector label {
+      font-weight: 500;
+      color: #444;
+    }
+    
+    .scale-selector select {
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    
+    /* Slider Group */
+    .slider-group {
+      border-bottom: 1px solid #eee;
+      padding: 16px 0;
+    }
+    
+    .slider-group:last-child {
+      border-bottom: none;
+    }
+    
+    .slider-row {
+      display: grid;
+      grid-template-columns: 60px 1fr 80px;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    
+    .slider-row label {
+      font-weight: 500;
+      color: #444;
+    }
+    
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      background: #e0e0e0;
+      border-radius: 3px;
+      outline: none;
+    }
+    
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      background: #667eea;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    
+    input[type=range]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      background: #667eea;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+    }
+    
+    input[type=number] {
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      text-align: center;
+    }
+    
+    .bar {
+      position: relative;
+      height: 24px;
+      background: #f0f0f0;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .bar-inner {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    .bar-label {
+      position: absolute;
+      left: 8px;
+      top: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      color: #333;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    /* Forecast Section */
+    .forecast-section {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 2px solid #eee;
+    }
+    
+    .forecast-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .input-label {
+      font-size: 14px;
+      color: #666;
+      font-weight: 500;
+    }
+    
+    .input-field {
+      padding: 10px 14px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .forecast-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .forecast-btn:hover {
+      transform: translateY(-1px);
+    }
+    
+    .forecast-result {
+      margin-top: 20px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+      display: none;
+    }
+    
+    .result-title {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+    
+    .result-text {
+      color: #666;
+      line-height: 1.8;
+    }
+    
+    /* Loading */
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Onboarding Screen -->
+  <div class="onboarding-screen" id="onboardingScreen">
+    <div class="onboarding-card">
+      <div class="logo">📊</div>
+      <h1 class="app-title">Review Rating Analyzer</h1>
+      <p class="app-subtitle">Visualize, simulate, and forecast your Google Business reviews</p>
+      
+      <div class="features-list">
+        <div class="feature-item">
+          <span class="feature-check">✓</span>
+          <span>Real-time review data synchronization</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-check">✓</span>
+          <span>Interactive rating distribution simulator</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-check">✓</span>
+          <span>Advanced forecasting with time-decay analysis</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-check">✓</span>
+          <span>Visual timeline with trend analysis</span>
+        </div>
+      </div>
+      
+      <div class="button-group">
+        <button class="connect-btn" onclick="connectGMB()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#fff"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#fff"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#fff"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#fff"/>
+          </svg>
+          Connect Google My Business
+        </button>
+        <button class="demo-btn" onclick="startDemo()">
+          🎮 Try Demo Mode
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Main App -->
+  <div class="main-app" id="mainApp">
+    <!-- Header -->
+    <div class="header">
+      <h1>Review Rating Analyzer</h1>
+      <div class="header-right">
+        <span class="demo-badge" id="demoBadge" style="display: none;">Demo Mode</span>
+        <button class="exit-btn" onclick="exitApp()">Exit</button>
+      </div>
+    </div>
+    
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="totalReviews">0</div>
+        <div class="stat-label">Total Reviews</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="avgRating">0.0</div>
+        <div class="stat-label">Average Rating</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="simulatedAvg">0.0</div>
+        <div class="stat-label">Simulated Average</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="projectedAvg">0.0</div>
+        <div class="stat-label">Projected Average</div>
+      </div>
+    </div>
+    
+    <!-- Main Grid -->
+    <div class="main-grid">
+      <!-- Chart -->
+      <div class="card">
+        <h2>Review Timeline & Forecast</h2>
+        <div class="time-controls">
+          <button class="time-btn active" onclick="changeTimeView('1M', this)">1 Month</button>
+          <button class="time-btn" onclick="changeTimeView('3M', this)">3 Months</button>
+          <button class="time-btn" onclick="changeTimeView('6M', this)">6 Months</button>
+          <button class="time-btn" onclick="changeTimeView('1Y', this)">1 Year</button>
+          <button class="time-btn" onclick="changeTimeView('ALL', this)">All Time</button>
+        </div>
+        <div id="chart-container">
+          <canvas id="timeSeriesChart"></canvas>
+        </div>
+        
+        <div style="margin-top: 20px; padding: 16px; background: #f8f9fa; border-radius: 8px; font-size: 14px; line-height: 1.6;">
+          <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 12px;">
+            <span style="font-size: 20px;">💡</span>
+            <div>
+              <strong>How this works:</strong><br>
+              This chart visualizes your review history and simulated future:
+            </div>
+          </div>
+          <ul style="margin: 0; padding-left: 32px; color: #666;">
+            <li><span style="color: #667eea;">Blue dots</span> show your historical reviews (left side)</li>
+            <li><span style="color: #4caf50;">Green dots</span> show simulated future reviews based on the sliders (right side)</li>
+            <li><span style="color: #764ba2;">Purple line</span> shows the rolling average trend</li>
+            <li>Use the <strong>sliders on the right</strong> to simulate different rating distributions</li>
+            <li>The <strong>forecast calculator</strong> below the sliders will analyze if your target rating is achievable</li>
+            <li>Changes to sliders instantly update the chart, statistics, and forecast</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Simulator -->
+      <div class="card">
+        <h2>Rating Distribution Simulator</h2>
+        <div class="scale-selector">
+          <label for="scale">Scale:</label>
+          <select id="scale" onchange="updateScale()">
+            <option value="100">Up to 100</option>
+            <option value="500">Up to 500</option>
+            <option value="1000" selected>Up to 1,000</option>
+            <option value="5000">Up to 5,000</option>
+          </select>
+          <span style="margin-left: auto; color: #666; font-size: 14px;">
+            Future reviews: <span id="futureTotal">0</span>
+          </span>
+        </div>
+        
+        <div style="margin-bottom: 16px; padding: 12px; background: #e8f4f8; border-radius: 6px; font-size: 13px; color: #1a73e8;">
+          <strong>📊 Auto-calculated based on your historical data:</strong> These values reflect your review rate and distribution from the selected time period.
+        </div>
+        
+        <div id="sliders">
+          <!-- Sliders will be generated here -->
+        </div>
+        
+        <div class="forecast-section">
+          <h3 style="font-size: 18px; margin-bottom: 16px;">Forecast Calculator</h3>
+          <div class="forecast-inputs">
+            <div class="input-group">
+              <label class="input-label">Target Rating</label>
+              <input type="number" class="input-field" id="targetRating" min="1" max="5" step="0.1" value="4.5">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Time Frame (days)</label>
+              <input type="number" class="input-field" id="timeFrame" min="1" max="365" value="90">
+            </div>
+          </div>
+          <button class="forecast-btn" onclick="calculateForecast()">Calculate Forecast</button>
+          <div class="forecast-result" id="forecastResult">
+            <div class="result-title">Forecast Analysis</div>
+            <div class="result-text" id="forecastText"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js"></script>
+  <script>
+    // Global state
+    let reviewData = [];
+    let simulatedData = [];
+    let chart = null;
+    let isDemo = false;
+    let currentTimeView = '1M';
+    let maxSliderValue = 1000;
+    const sliderCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    
+    // Connect to GMB (mock for demo)
+    function connectGMB() {
+      alert('In production, this would redirect to Google OAuth. For now, starting demo mode.');
+      startDemo();
+    }
+    
+    // Start demo mode
+    function startDemo() {
+      isDemo = true;
+      document.getElementById('onboardingScreen').style.display = 'none';
+      document.getElementById('mainApp').classList.add('active');
+      document.getElementById('demoBadge').style.display = 'block';
+      
+      // Generate demo data
+      reviewData = generateDemoData();
+      
+      // Initialize components
+      initializeSliders();
+      updateStats();
+      createChart();
+    }
+    
+    // Exit app
+    function exitApp() {
+      location.reload();
+    }
+    
+    // Generate realistic demo data
+    function generateDemoData() {
+      const data = [];
+      const now = new Date();
+      
+      // Rating distribution weights
+      const weights = { 5: 65, 4: 20, 3: 8, 2: 4, 1: 3 };
+      
+      // Generate 365 days of data
+      for (let daysAgo = 365; daysAgo > 0; daysAgo--) {
+        const date = new Date(now);
+        date.setDate(date.getDate() - daysAgo);
+        
+        // Vary review count by day
+        const baseCount = 1.5;
+        const dayVariation = Math.random() * 2;
+        const reviewCount = Math.max(0, Math.round(baseCount + dayVariation));
+        
+        // Generate reviews for this day
+        for (let i = 0; i < reviewCount; i++) {
+          const rating = getWeightedRating(weights);
+          const hour = 8 + Math.floor(Math.random() * 14);
+          const reviewDate = new Date(date);
+          reviewDate.setHours(hour, Math.floor(Math.random() * 60));
+          
+          data.push({
+            id: `review_${daysAgo}_${i}`,
+            rating: rating,
+            createTime: reviewDate,
+            daysAgo: -daysAgo  // Negative for historical (left side)
+          });
+        }
+      }
+      
+      return data;
+    }
+    
+    // Get weighted random rating
+    function getWeightedRating(weights) {
+      const total = Object.values(weights).reduce((a, b) => a + b, 0);
+      let random = Math.random() * total;
+      
+      for (const [rating, weight] of Object.entries(weights)) {
+        random -= weight;
+        if (random <= 0) return parseInt(rating);
+      }
+      return 5;
+    }
+    
+    // Calculate default slider values based on historical data
+    function calculateDefaultSliderValues() {
+      if (reviewData.length === 0) {
+        // No data, return zeros
+        return { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+      }
+      
+      // Get the time range for analysis
+      let daysToAnalyze;
+      switch (currentTimeView) {
+        case '1M': daysToAnalyze = 30; break;
+        case '3M': daysToAnalyze = 90; break;
+        case '6M': daysToAnalyze = 180; break;
+        case '1Y': daysToAnalyze = 365; break;
+        case 'ALL': daysToAnalyze = 365; break; // Default to 1 year for ALL
+        default: daysToAnalyze = 30;
+      }
+      
+      // Get reviews from the selected time period
+      const now = new Date();
+      const cutoffDate = new Date(now);
+      cutoffDate.setDate(cutoffDate.getDate() - daysToAnalyze);
+      
+      const recentReviews = reviewData.filter(r => {
+        const reviewDate = new Date(r.createTime);
+        return reviewDate >= cutoffDate;
+      });
+      
+      if (recentReviews.length === 0) {
+        return { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+      }
+      
+      // Calculate distribution percentages
+      const distribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+      recentReviews.forEach(r => {
+        distribution[r.rating]++;
+      });
+      
+      // Calculate review rate (reviews per day)
+      const reviewRate = recentReviews.length / daysToAnalyze;
+      
+      // Get time frame from the forecast calculator
+      const timeFrame = parseInt(document.getElementById('timeFrame').value) || 90;
+      
+      // Calculate expected reviews for the forecast period
+      const expectedReviews = Math.round(reviewRate * timeFrame);
+      
+      // Calculate default values maintaining the historical distribution
+      const defaults = {};
+      for (let star = 1; star <= 5; star++) {
+        const percentage = recentReviews.length > 0 ? distribution[star] / recentReviews.length : 0;
+        defaults[star] = Math.round(expectedReviews * percentage);
+      }
+      
+      // Ensure total doesn't exceed max slider value
+      const total = Object.values(defaults).reduce((a, b) => a + b, 0);
+      if (total > maxSliderValue) {
+        // Scale down proportionally
+        const scale = maxSliderValue / total;
+        for (let star = 1; star <= 5; star++) {
+          defaults[star] = Math.floor(defaults[star] * scale);
+        }
+      }
+      
+      return defaults;
+    }
+    
+    // Update sliders with calculated defaults
+    function updateSlidersWithDefaults() {
+      const defaults = calculateDefaultSliderValues();
+      
+      for (let star = 1; star <= 5; star++) {
+        const value = defaults[star];
+        sliderCounts[star] = value;
+        document.getElementById(`slider${star}`).value = value;
+        document.getElementById(`number${star}`).value = value;
+      }
+      
+      updateDistribution();
+      updateSimulation();
+    }
+    
+    // Initialize sliders
+    function initializeSliders() {
+      const container = document.getElementById('sliders');
+      container.innerHTML = '';
+      
+      for (let star = 5; star >= 1; star--) {
+        const group = document.createElement('div');
+        group.className = 'slider-group';
+        
+        group.innerHTML = `
+          <div class="slider-row">
+            <label>${star}★</label>
+            <input type="range" id="slider${star}" min="0" max="${maxSliderValue}" value="0" 
+                   oninput="updateSlider(${star})">
+            <input type="number" id="number${star}" min="0" max="${maxSliderValue}" value="0" 
+                   oninput="updateNumber(${star})">
+          </div>
+          <div class="bar">
+            <div class="bar-inner" id="bar${star}" style="width: 0%"></div>
+            <div class="bar-label" id="label${star}">0%</div>
+          </div>
+        `;
+        
+        container.appendChild(group);
+      }
+      
+      // Set default values based on historical data
+      updateSlidersWithDefaults();
+    }
+    
+    // Update slider
+    function updateSlider(star) {
+      const slider = document.getElementById(`slider${star}`);
+      const number = document.getElementById(`number${star}`);
+      const value = parseInt(slider.value);
+      
+      // Check if total would exceed max
+      const otherTotal = Object.entries(sliderCounts)
+        .filter(([s]) => s != star)
+        .reduce((sum, [, count]) => sum + count, 0);
+      
+      const maxAllowed = maxSliderValue - otherTotal;
+      const finalValue = Math.min(value, maxAllowed);
+      
+      slider.value = finalValue;
+      number.value = finalValue;
+      sliderCounts[star] = finalValue;
+      
+      updateDistribution();
+      updateSimulation();
+    }
+    
+    // Update number input
+    function updateNumber(star) {
+      const number = document.getElementById(`number${star}`);
+      const slider = document.getElementById(`slider${star}`);
+      let value = parseInt(number.value) || 0;
+      
+      // Check constraints
+      const otherTotal = Object.entries(sliderCounts)
+        .filter(([s]) => s != star)
+        .reduce((sum, [, count]) => sum + count, 0);
+      
+      const maxAllowed = maxSliderValue - otherTotal;
+      value = Math.min(Math.max(0, value), maxAllowed);
+      
+      number.value = value;
+      slider.value = value;
+      sliderCounts[star] = value;
+      
+      updateDistribution();
+      updateSimulation();
+    }
+    
+    // Update scale
+    function updateScale() {
+      const scale = document.getElementById('scale');
+      maxSliderValue = parseInt(scale.value);
+      
+      // Update max values for all sliders
+      for (let star = 1; star <= 5; star++) {
+        document.getElementById(`slider${star}`).max = maxSliderValue;
+        document.getElementById(`number${star}`).max = maxSliderValue;
+      }
+      
+      // Recalculate defaults with new scale
+      updateSlidersWithDefaults();
+    }
+    
+    // Update distribution bars
+    function updateDistribution() {
+      const total = Object.values(sliderCounts).reduce((a, b) => a + b, 0) || 1;
+      document.getElementById('futureTotal').textContent = total;
+      
+      for (let star = 1; star <= 5; star++) {
+        const count = sliderCounts[star];
+        const percentage = (count / total * 100).toFixed(1);
+        
+        const bar = document.getElementById(`bar${star}`);
+        const label = document.getElementById(`label${star}`);
+        
+        bar.style.width = percentage + '%';
+        if (percentage > 15) {
+          bar.textContent = percentage + '%';
+          label.textContent = '';
+        } else {
+          bar.textContent = '';
+          label.textContent = percentage + '%';
+        }
+      }
+    }
+    
+    // Update simulation
+    function updateSimulation() {
+      // Generate simulated future reviews
+      simulatedData = [];
+      const timeFrame = parseInt(document.getElementById('timeFrame').value) || 90;
+      
+      for (let star = 1; star <= 5; star++) {
+        const count = sliderCounts[star];
+        const reviewsPerDay = count / timeFrame;
+        
+        for (let day = 1; day <= timeFrame; day++) {
+          const dayReviews = Math.random() < (reviewsPerDay % 1) ? 
+            Math.ceil(reviewsPerDay) : Math.floor(reviewsPerDay);
+          
+          for (let i = 0; i < dayReviews; i++) {
+            simulatedData.push({
+              rating: star,
+              daysAgo: day, // Positive for future (right side)
+              simulated: true
+            });
+          }
+        }
+      }
+      
+      updateStats();
+      updateChart();
+    }
+    
+    // Update statistics
+    function updateStats() {
+      // Current stats
+      const currentTotal = reviewData.length;
+      const currentSum = reviewData.reduce((sum, r) => sum + r.rating, 0);
+      const currentAvg = currentTotal > 0 ? (currentSum / currentTotal).toFixed(2) : '0.00';
+      
+      document.getElementById('totalReviews').textContent = currentTotal;
+      document.getElementById('avgRating').textContent = currentAvg + '★';
+      
+      // Simulated stats
+      const simTotal = Object.values(sliderCounts).reduce((a, b) => a + b, 0);
+      const simSum = Object.entries(sliderCounts).reduce((sum, [star, count]) => 
+        sum + (parseInt(star) * count), 0);
+      const simAvg = simTotal > 0 ? (simSum / simTotal).toFixed(2) : '0.00';
+      
+      document.getElementById('simulatedAvg').textContent = simAvg + '★';
+      
+      // Projected stats (current + simulated)
+      const projTotal = currentTotal + simTotal;
+      const projSum = currentSum + simSum;
+      const projAvg = projTotal > 0 ? (projSum / projTotal).toFixed(2) : '0.00';
+      
+      document.getElementById('projectedAvg').textContent = projAvg + '★';
+    }
+    
+    // Create chart
+    function createChart() {
+      const ctx = document.getElementById('timeSeriesChart');
+      
+      if (chart) {
+        chart.destroy();
+      }
+      
+      // Get filtered data for chart
+      const filteredHistorical = filterByTimeView(reviewData);
+      const filteredSimulated = filterByTimeView(simulatedData);
+      
+      const datasets = [
+        {
+          label: 'Historical Reviews',
+          data: getChartData(filteredHistorical, false),
+          backgroundColor: 'rgba(102, 126, 234, 0.6)',
+          borderColor: 'rgba(102, 126, 234, 1)',
+          pointRadius: 4,
+          pointHoverRadius: 6
+        }
+      ];
+      
+      // Add simulated data if exists
+      if (filteredSimulated.length > 0) {
+        datasets.push({
+          label: 'Simulated Future',
+          data: getChartData(filteredSimulated, true),
+          backgroundColor: 'rgba(76, 175, 80, 0.4)',
+          borderColor: 'rgba(76, 175, 80, 1)',
+          pointRadius: 3,
+          pointHoverRadius: 5
+        });
+      }
+      
+      // Add trend line
+      const trendData = calculateTrend();
+      if (trendData.length > 0) {
+        datasets.push({
+          label: 'Average Trend',
+          data: trendData,
+          type: 'line',
+          borderColor: 'rgba(118, 75, 162, 1)',
+          backgroundColor: 'transparent',
+          borderWidth: 3,
+          pointRadius: 0,
+          tension: 0.4
+        });
+      }
+      
+      // Determine x-axis range based on current view
+      let xMin, xMax;
+      switch (currentTimeView) {
+        case '1M': xMin = -30; xMax = 30; break;
+        case '3M': xMin = -90; xMax = 90; break;
+        case '6M': xMin = -180; xMax = 180; break;
+        case '1Y': xMin = -365; xMax = 365; break;
+        case 'ALL': 
+          xMin = -365; 
+          xMax = Math.max(365, ...simulatedData.map(d => d.daysAgo));
+          break;
+        default: xMin = -30; xMax = 30;
+      }
+      
+      chart = new Chart(ctx, {
+        type: 'scatter',
+        data: { datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top'
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const point = context.raw;
+                  const label = context.dataset.label;
+                  const daysText = point.x > 0 ? 
+                    `In ${point.x} days` : 
+                    `${Math.abs(point.x)} days ago`;
+                  return `${label}: ${point.y}★ (${daysText})`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'linear',
+              position: 'bottom',
+              min: xMin,
+              max: xMax,
+              title: {
+                display: true,
+                text: 'Days from Today'
+              },
+              ticks: {
+                callback: function(value) {
+                  if (value === 0) return 'Today';
+                  return value > 0 ? `+${value}d` : `${value}d`;
+                }
+              },
+              grid: {
+                color: function(context) {
+                  return context.tick.value === 0 ? '#666' : '#e0e0e0';
+                },
+                lineWidth: function(context) {
+                  return context.tick.value === 0 ? 2 : 1;
+                }
+              }
+            },
+            y: {
+              min: 0.5,
+              max: 5.5,
+              title: {
+                display: true,
+                text: 'Rating'
+              },
+              ticks: {
+                stepSize: 1,
+                callback: function(value) {
+                  return value + '★';
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+    
+    // Update chart
+    function updateChart() {
+      if (!chart) {
+        createChart();
+        return;
+      }
+      
+      // Filter data based on current time view
+      const filteredHistorical = filterByTimeView(reviewData);
+      const filteredSimulated = filterByTimeView(simulatedData);
+      
+      // Update datasets
+      chart.data.datasets[0].data = getChartData(filteredHistorical, false);
+      
+      // Update or add simulated data
+      if (filteredSimulated.length > 0) {
+        const simData = getChartData(filteredSimulated, true);
+        if (chart.data.datasets.length > 1 && chart.data.datasets[1].label === 'Simulated Future') {
+          chart.data.datasets[1].data = simData;
+        } else {
+          chart.data.datasets.splice(1, 0, {
+            label: 'Simulated Future',
+            data: simData,
+            backgroundColor: 'rgba(76, 175, 80, 0.4)',
+            borderColor: 'rgba(76, 175, 80, 1)',
+            pointRadius: 3,
+            pointHoverRadius: 5
+          });
+        }
+      } else {
+        // Remove simulated data if none exists
+        const simIndex = chart.data.datasets.findIndex(d => d.label === 'Simulated Future');
+        if (simIndex >= 0) {
+          chart.data.datasets.splice(simIndex, 1);
+        }
+      }
+      
+      // Update trend
+      const trendData = calculateTrend();
+      const trendIndex = chart.data.datasets.findIndex(d => d.label === 'Average Trend');
+      if (trendIndex >= 0) {
+        chart.data.datasets[trendIndex].data = trendData;
+      }
+      
+      // Update x-axis range based on current view
+      let xMin, xMax;
+      switch (currentTimeView) {
+        case '1M': xMin = -30; xMax = 30; break;
+        case '3M': xMin = -90; xMax = 90; break;
+        case '6M': xMin = -180; xMax = 180; break;
+        case '1Y': xMin = -365; xMax = 365; break;
+        case 'ALL': 
+          xMin = -365; 
+          xMax = Math.max(365, ...simulatedData.map(d => d.daysAgo));
+          break;
+        default: xMin = -30; xMax = 30;
+      }
+      
+      chart.options.scales.x.min = xMin;
+      chart.options.scales.x.max = xMax;
+      
+      chart.update('none');
+    }
+    
+    // Get chart data
+    function getChartData(data, isSimulated) {
+      const filtered = filterByTimeView(data);
+      return filtered.map(r => ({
+        x: r.daysAgo,  // Use daysAgo directly - negative for past, positive for future
+        y: r.rating
+      }));
+    }
+    
+    // Filter by time view
+    function filterByTimeView(data) {
+      if (currentTimeView === 'ALL') return data;
+      
+      let maxDays;
+      switch (currentTimeView) {
+        case '1M': maxDays = 30; break;
+        case '3M': maxDays = 90; break;
+        case '6M': maxDays = 180; break;
+        case '1Y': maxDays = 365; break;
+        default: maxDays = 30;
+      }
+      
+      // For historical data (negative daysAgo), filter by absolute value
+      // For future data (positive daysAgo), filter directly
+      return data.filter(r => {
+        const absDays = Math.abs(r.daysAgo);
+        return absDays <= maxDays;
+      });
+    }
+    
+    // Calculate trend line
+    function calculateTrend() {
+      // First filter the data by current time view
+      const filteredHistorical = filterByTimeView(reviewData);
+      const filteredSimulated = filterByTimeView(simulatedData);
+      const allData = [...filteredHistorical, ...filteredSimulated];
+      
+      if (allData.length < 2) return [];
+      
+      // Group by periods and calculate moving average
+      const periodSize = 7; // 7-day moving average
+      const trendPoints = [];
+      
+      // Sort by days ago
+      const sorted = allData.sort((a, b) => a.daysAgo - b.daysAgo);
+      
+      for (let i = 0; i < sorted.length; i += periodSize) {
+        const slice = sorted.slice(i, i + periodSize);
+        if (slice.length > 0) {
+          const avgRating = slice.reduce((sum, r) => sum + r.rating, 0) / slice.length;
+          const avgDays = slice.reduce((sum, r) => sum + r.daysAgo, 0) / slice.length;
+          trendPoints.push({
+            x: avgDays,
+            y: avgRating
+          });
+        }
+      }
+      
+      return trendPoints;
+    }
+    
+    // Change time view
+    function changeTimeView(view, button) {
+      currentTimeView = view;
+      
+      // Update active button
+      document.querySelectorAll('.time-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      button.classList.add('active');
+      
+      // Update chart
+      updateChart();
+      
+      // Update slider defaults based on new time range
+      updateSlidersWithDefaults();
+    }
+    
+    // Calculate forecast
+    function calculateForecast() {
+      const targetRating = parseFloat(document.getElementById('targetRating').value);
+      const timeFrame = parseInt(document.getElementById('timeFrame').value);
+      
+      // Current stats
+      const currentTotal = reviewData.length;
+      const currentSum = reviewData.reduce((sum, r) => sum + r.rating, 0);
+      const currentAvg = currentTotal > 0 ? currentSum / currentTotal : 0;
+      
+      // Simulated stats
+      const simTotal = Object.values(sliderCounts).reduce((a, b) => a + b, 0);
+      const simSum = Object.entries(sliderCounts).reduce((sum, [star, count]) => 
+        sum + (parseInt(star) * count), 0);
+      
+      // Check if any reviews are planned
+      if (simTotal === 0) {
+        showForecastResult(`
+          <div style="color: #dc3545;">
+            ⚠️ Please add some simulated reviews using the sliders above to calculate a forecast.
+          </div>
+        `);
+        return;
+      }
+      
+      // Calculate projections
+      const projTotal = currentTotal + simTotal;
+      const projSum = currentSum + simSum;
+      const projAvg = projSum / projTotal;
+      
+      // Calculate daily rate
+      const dailyRate = simTotal / timeFrame;
+      
+      // Calculate time-weighted projection
+      const weightedCurrent = currentSum * 0.7; // Current reviews weighted at 70%
+      const weightedNew = simSum * 1.0; // New reviews weighted at 100%
+      const weightedAvg = (weightedCurrent + weightedNew) / (currentTotal * 0.7 + simTotal);
+      
+      // Generate result HTML
+      let resultHTML = `
+        <div style="margin-bottom: 20px;">
+          <strong>Current Status:</strong><br>
+          • Reviews: ${currentTotal}<br>
+          • Average: ${currentAvg.toFixed(2)}★
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+          <strong>Simulation Summary:</strong><br>
+          • New reviews: ${simTotal} over ${timeFrame} days<br>
+          • Rate: ${dailyRate.toFixed(1)} reviews/day<br>
+          • Distribution: ${Object.entries(sliderCounts)
+            .filter(([_, count]) => count > 0)
+            .map(([star, count]) => `${star}★ (${count})`)
+            .join(', ')}
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+          <strong>Projected Outcome:</strong><br>
+          • Total reviews: ${projTotal}<br>
+          • Projected average: ${projAvg.toFixed(2)}★<br>
+          • Time-weighted average: ${weightedAvg.toFixed(2)}★
+        </div>
+      `;
+      
+      // Check if target is achieved
+      if (projAvg >= targetRating) {
+        resultHTML += `
+          <div style="background: #d4edda; color: #155724; padding: 12px; border-radius: 6px;">
+            ✅ <strong>Target Achieved!</strong><br>
+            Your simulated distribution will reach the target of ${targetRating}★
+          </div>
+        `;
+      } else {
+        // Calculate what's needed
+        const needed5Stars = Math.ceil((targetRating * projTotal - currentSum - 
+          (simTotal - sliderCounts[5]) * 3) / 2); // Assume non-5★ average 3★
+        
+        resultHTML += `
+          <div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 6px;">
+            ❌ <strong>Target Not Met</strong><br>
+            To reach ${targetRating}★, you need approximately ${needed5Stars} five-star reviews<br>
+            (${((needed5Stars / simTotal) * 100).toFixed(0)}% of planned reviews)
+          </div>
+        `;
+      }
+      
+      showForecastResult(resultHTML);
+    }
+    
+    // Show forecast result
+    function showForecastResult(html) {
+      const resultDiv = document.getElementById('forecastResult');
+      const textDiv = document.getElementById('forecastText');
+      
+      textDiv.innerHTML = html;
+      resultDiv.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
