@@ -19,21 +19,29 @@
     
     /* Onboarding Screen */
     .onboarding-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      padding: 20px;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #9f1239 0%, #d60000 50%, #f64002 100%);
+      z-index: 1000;
+      color: #333; /* Ensure text color is set for all child elements */
     }
     
     .onboarding-card {
       background: #fff;
       border-radius: 16px;
       padding: 48px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.2);
       max-width: 600px;
       width: 100%;
       text-align: center;
+      color: #333; /* Explicitly set text color */
     }
     
     .logo {
@@ -45,9 +53,10 @@
       font-size: 36px;
       font-weight: 700;
       margin-bottom: 16px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #d60000 0%, #f64002 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     
     .app-subtitle {
@@ -59,6 +68,7 @@
     .features-list {
       text-align: left;
       margin: 32px 0;
+      color: #333; /* Ensure feature text is visible */
     }
     
     .feature-item {
@@ -96,14 +106,14 @@
     }
     
     .connect-btn {
-      background: #4285f4;
+      background: #d60000;
       color: white;
     }
     
     .connect-btn:hover {
-      background: #3367d6;
+      background: #b50000;
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+      box-shadow: 0 4px 12px rgba(214, 0, 0, 0.3);
     }
     
     .demo-btn {
@@ -144,9 +154,10 @@
     .header h1 {
       font-size: 28px;
       font-weight: 700;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #d60000 0%, #f64002 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     
     .header-right {
@@ -166,7 +177,7 @@
     
     .exit-btn {
       padding: 8px 16px;
-      background: #667eea;
+      background: #d60000;
       color: white;
       border: none;
       border-radius: 6px;
@@ -176,7 +187,7 @@
     }
     
     .exit-btn:hover {
-      background: #5a67d8;
+      background: #b50000;
     }
     
     /* Stats Grid */
@@ -198,7 +209,10 @@
     .stat-value {
       font-size: 32px;
       font-weight: 700;
-      color: #667eea;
+      background: linear-gradient(135deg, #d60000 0%, #f64002 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       margin-bottom: 4px;
     }
     
@@ -262,9 +276,9 @@
     }
     
     .time-btn.active {
-      background: #667eea;
+      background: #d60000;
       color: white;
-      border-color: #667eea;
+      border-color: #d60000;
     }
     
     /* Simulator Section */
@@ -319,30 +333,64 @@
     }
     
     input[type=range] {
+      /* Reset appearance */
       -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      
       width: 100%;
       height: 6px;
       background: #e0e0e0;
       border-radius: 3px;
       outline: none;
+      margin: 10px 0;
+      padding: 0;
+      border: none;
+    }
+    
+    /* Firefox */
+    input[type=range]::-moz-range-track {
+      width: 100%;
+      height: 6px;
+      background: #e0e0e0;
+      border-radius: 3px;
+      border: none;
+    }
+    
+    /* WebKit/Blink */
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 6px;
+      background: #e0e0e0;
+      border-radius: 3px;
+      border: none;
     }
     
     input[type=range]::-webkit-slider-thumb {
+      /* Reset appearance */
       -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      
       width: 18px;
       height: 18px;
-      background: #667eea;
+      background: linear-gradient(135deg, #d60000 0%, #f64002 100%);
+      border: 2px solid #fff;
       border-radius: 50%;
       cursor: pointer;
+      margin-top: -6px; /* Centers thumb on the track */
+      box-shadow: 0 2px 4px rgba(214, 0, 0, 0.3);
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
     }
     
     input[type=range]::-moz-range-thumb {
       width: 18px;
       height: 18px;
-      background: #667eea;
+      background: linear-gradient(135deg, #d60000 0%, #f64002 100%);
       border-radius: 50%;
       cursor: pointer;
       border: none;
+      box-shadow: 0 2px 4px rgba(214, 0, 0, 0.3);
     }
     
     input[type=number] {
@@ -363,7 +411,7 @@
     
     .bar-inner {
       height: 100%;
-      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(90deg, #9f1239 0%, #d60000 50%, #ff9393 100%);
       transition: width 0.5s ease;
       display: flex;
       align-items: center;
@@ -384,7 +432,59 @@
       font-size: 12px;
       font-weight: 600;
     }
-    
+   
+  /* Onboarding Screen */
+  .onboarding-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #d60000 0%, #f64002 100%);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.3s ease-in-out;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  /* Info box styles */
+  .info-box {
+    position: relative;
+    margin-bottom: 16px;
+    padding: 12px;
+    padding-right: 36px;
+    background: #e8f4f8;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #1a73e8;
+    display: block;
+  }
+  
+  .info-box.hidden {
+    display: none;
+  }
+  
+  .info-box-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: #1a73e8;
+    cursor: pointer;
+    padding: 4px 8px;
+    line-height: 1;
+    opacity: 0.7;
+  }
+  
+  .info-box-close:hover {
+    opacity: 1;
+  }
     /* Forecast Section */
     .forecast-section {
       margin-top: 24px;
@@ -421,24 +521,26 @@
     
     .input-field:focus {
       outline: none;
-      border-color: #667eea;
+      border-color: #f64002;
     }
     
     .forecast-btn {
       width: 100%;
       padding: 12px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #d60000;
       color: white;
       border: none;
       border-radius: 8px;
       font-size: 16px;
       font-weight: 500;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: all 0.3s;
     }
     
     .forecast-btn:hover {
+      background: #b50000;
       transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(214, 0, 0, 0.3);
     }
     
     .forecast-result {
@@ -446,7 +548,7 @@
       padding: 20px;
       background: #f8f9fa;
       border-radius: 8px;
-      border-left: 4px solid #667eea;
+      border-left: 4px solid #d60000;
       display: none;
     }
     
@@ -467,7 +569,7 @@
       width: 24px;
       height: 24px;
       border: 3px solid #f3f3f3;
-      border-top: 3px solid #667eea;
+      border-top: 3px solid #d60000;
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin: 0 auto;
@@ -546,7 +648,7 @@
       </div>
       <div class="stat-card">
         <div class="stat-value" id="simulatedAvg">0.0</div>
-        <div class="stat-label">Simulated Average</div>
+        <div class="stat-label">Future Ratings (Simulated) Average</div>
       </div>
       <div class="stat-card">
         <div class="stat-value" id="projectedAvg">0.0</div>
@@ -581,7 +683,7 @@
           <ul style="margin: 0; padding-left: 32px; color: #666;">
             <li><span style="color: #667eea;">Blue dots</span> show your historical reviews (left side)</li>
             <li><span style="color: #4caf50;">Green dots</span> show simulated future reviews based on the sliders (right side)</li>
-            <li><span style="color: #764ba2;">Purple line</span> shows the rolling average trend</li>
+            <li><span style="color: #9f1239;">Red line</span> shows the rolling average trend</li>
             <li>Use the <strong>sliders on the right</strong> to simulate different rating distributions</li>
             <li>The <strong>forecast calculator</strong> below the sliders will analyze if your target rating is achievable</li>
             <li>Changes to sliders instantly update the chart, statistics, and forecast</li>
@@ -605,7 +707,8 @@
           </span>
         </div>
         
-        <div style="margin-bottom: 16px; padding: 12px; background: #e8f4f8; border-radius: 6px; font-size: 13px; color: #1a73e8;">
+        <div class="info-box" id="infoBox">
+          <button class="info-box-close" id="closeInfoBox">&times;</button>
           <strong>📊 Auto-calculated based on your historical data:</strong> These values reflect your review rate and distribution from the selected time period.
         </div>
         
@@ -731,14 +834,35 @@
       
       // Get the time range for analysis
       let daysToAnalyze;
+      let forecastDays;
       switch (currentTimeView) {
-        case '1M': daysToAnalyze = 30; break;
-        case '3M': daysToAnalyze = 90; break;
-        case '6M': daysToAnalyze = 180; break;
-        case '1Y': daysToAnalyze = 365; break;
-        case 'ALL': daysToAnalyze = 365; break; // Default to 1 year for ALL
-        default: daysToAnalyze = 30;
+        case '1M': 
+          daysToAnalyze = 30; 
+          forecastDays = 30;
+          break;
+        case '3M': 
+          daysToAnalyze = 90; 
+          forecastDays = 90;
+          break;
+        case '6M': 
+          daysToAnalyze = 180; 
+          forecastDays = 180;
+          break;
+        case '1Y': 
+          daysToAnalyze = 365; 
+          forecastDays = 365;
+          break;
+        case 'ALL': 
+          daysToAnalyze = 365; 
+          forecastDays = 365;
+          break;
+        default: 
+          daysToAnalyze = 30;
+          forecastDays = 30;
       }
+      
+      // Update the time frame input to match
+      document.getElementById('timeFrame').value = forecastDays;
       
       // Get reviews from the selected time period
       const now = new Date();
@@ -763,11 +887,8 @@
       // Calculate review rate (reviews per day)
       const reviewRate = recentReviews.length / daysToAnalyze;
       
-      // Get time frame from the forecast calculator
-      const timeFrame = parseInt(document.getElementById('timeFrame').value) || 90;
-      
       // Calculate expected reviews for the forecast period
-      const expectedReviews = Math.round(reviewRate * timeFrame);
+      const expectedReviews = Math.round(reviewRate * forecastDays);
       
       // Calculate default values maintaining the historical distribution
       const defaults = {};
@@ -922,11 +1043,22 @@
       simulatedData = [];
       const timeFrame = parseInt(document.getElementById('timeFrame').value) || 90;
       
+      // Determine forecast length based on current time view
+      let forecastDays;
+      switch (currentTimeView) {
+        case '1M': forecastDays = 30; break;
+        case '3M': forecastDays = 90; break;
+        case '6M': forecastDays = 180; break;
+        case '1Y': forecastDays = 365; break;
+        case 'ALL': forecastDays = 365; break;
+        default: forecastDays = timeFrame;
+      }
+      
       for (let star = 1; star <= 5; star++) {
         const count = sliderCounts[star];
         const reviewsPerDay = count / timeFrame;
         
-        for (let day = 1; day <= timeFrame; day++) {
+        for (let day = 1; day <= forecastDays; day++) {
           const dayReviews = Math.random() < (reviewsPerDay % 1) ? 
             Math.ceil(reviewsPerDay) : Math.floor(reviewsPerDay);
           
@@ -1012,7 +1144,7 @@
           label: 'Average Trend',
           data: trendData,
           type: 'line',
-          borderColor: 'rgba(118, 75, 162, 1)',
+          borderColor: '#9f1239',
           backgroundColor: 'transparent',
           borderWidth: 3,
           pointRadius: 0,
@@ -1029,7 +1161,7 @@
         case '1Y': xMin = -365; xMax = 365; break;
         case 'ALL': 
           xMin = -365; 
-          xMax = Math.max(365, ...simulatedData.map(d => d.daysAgo));
+          xMax = 365;
           break;
         default: xMin = -30; xMax = 30;
       }
@@ -1155,7 +1287,7 @@
         case '1Y': xMin = -365; xMax = 365; break;
         case 'ALL': 
           xMin = -365; 
-          xMax = Math.max(365, ...simulatedData.map(d => d.daysAgo));
+          xMax = 365;
           break;
         default: xMin = -30; xMax = 30;
       }
@@ -1341,6 +1473,22 @@
       textDiv.innerHTML = html;
       resultDiv.style.display = 'block';
     }
+    // Handle info box close button
+    document.addEventListener('DOMContentLoaded', function() {
+      const infoBox = document.getElementById('infoBox');
+      const closeButton = document.getElementById('closeInfoBox');
+      
+      // Check if the box was previously closed
+      if (localStorage.getItem('infoBoxDismissed') === 'true') {
+        infoBox.classList.add('hidden');
+      }
+      
+      // Add click event to close button
+      closeButton.addEventListener('click', function() {
+        infoBox.classList.add('hidden');
+        localStorage.setItem('infoBoxDismissed', 'true');
+      });
+    });
   </script>
 </body>
 </html>
