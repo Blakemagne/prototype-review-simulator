@@ -30,6 +30,7 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
+      padding-bottom: 80px;
       background: linear-gradient(135deg, #9f1239 0%, #d60000 50%, #f64002 100%);
       z-index: 1000;
       overflow-y: auto;
@@ -147,6 +148,7 @@
     @media (max-width: 768px) {
       .onboarding-screen {
         padding: 16px;
+        padding-bottom: 60px;
       }
       
       .onboarding-card {
@@ -264,10 +266,17 @@
       max-width: 1400px;
       margin: 0 auto;
       padding: 20px;
+      min-height: calc(100vh - 100px);
+      position: relative;
+      width: 100%;
     }
     
     .main-app.active {
       display: block;
+    }
+    
+    .main-content {
+      min-height: calc(100vh - 180px);
     }
     
     /* Header */
@@ -296,36 +305,46 @@
     .header-right {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
     }
     
     .demo-badge {
       background: #ffc107;
       color: #000;
-      padding: 6px 12px;
+      padding: 8px 16px;
       border-radius: 20px;
-      font-size: 12px;
-      font-weight: 500;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      height: 36px;
     }
     
     .exit-btn {
-      padding: 8px 16px;
+      padding: 8px 20px;
       background: #d60000;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      transition: all 0.2s;
     }
     
     .exit-btn:hover {
       background: #b50000;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(214, 0, 0, 0.2);
     }
     
     .exit-btn:active {
       background: #a00000;
+      transform: translateY(0);
     }
     
     /* Stats Grid */
@@ -710,6 +729,49 @@
       100% { transform: rotate(360deg); }
     }
     
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 24px 20px;
+      color: #666;
+      font-size: 14px;
+      margin-top: 60px;
+      background: #f8f9fa;
+    }
+    
+    .footer-link {
+      color: #9f1239;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    
+    .footer-link:hover {
+      color: #d60000;
+      text-decoration: underline;
+    }
+    
+    .onboarding-footer {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+    }
+    
+    .onboarding-footer .footer-link {
+      color: #fff;
+      opacity: 0.9;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+    
+    .onboarding-footer .footer-link:hover {
+      opacity: 1;
+    }
+    
     /* Mobile Optimizations for Main App */
     @media (max-width: 768px) {
       .main-app {
@@ -731,13 +793,15 @@
       }
       
       .demo-badge {
-        font-size: 11px;
-        padding: 4px 10px;
+        font-size: 12px;
+        padding: 6px 12px;
+        height: 32px;
       }
       
       .exit-btn {
-        padding: 6px 12px;
+        padding: 6px 16px;
         font-size: 13px;
+        height: 32px;
       }
       
       .stats-grid {
@@ -847,6 +911,17 @@
       .result-title {
         font-size: 16px;
       }
+      
+      .footer {
+        margin-top: 40px;
+        padding: 20px 16px;
+        font-size: 13px;
+      }
+      
+      .onboarding-footer {
+        font-size: 13px;
+        bottom: 12px;
+      }
     }
     
     @media (max-width: 480px) {
@@ -948,18 +1023,23 @@
         </button>
       </div>
     </div>
+    
+    <footer class="onboarding-footer">
+      Powered by <a href="#" class="footer-link">SalesHero Solutions</a>
+    </footer>
   </div>
   
   <!-- Main App -->
   <div class="main-app" id="mainApp">
-    <!-- Header -->
-    <div class="header">
-      <h1>Review Rating Analyzer</h1>
-      <div class="header-right">
-        <span class="demo-badge" id="demoBadge" style="display: none;">Demo Mode</span>
-        <button class="exit-btn" onclick="exitApp()">Exit</button>
+    <div class="main-content">
+      <!-- Header -->
+      <div class="header">
+        <h1>Review Rating Analyzer</h1>
+        <div class="header-right">
+          <span class="demo-badge" id="demoBadge" style="display: none;">Demo Mode</span>
+          <button class="exit-btn" onclick="exitApp()">Exit</button>
+        </div>
       </div>
-    </div>
     
     <!-- Stats -->
     <div class="stats-grid">
@@ -1053,7 +1133,7 @@
               <input type="number" class="input-field" id="timeFrame" min="1" max="365" value="90">
             </div>
           </div>
-          <button class="forecast-btn" onclick="calculateForecast()">Calculate Forecast</button>
+          <button class="forecast-btn" onclick="calculateForecast()">Calculate Forecast          </button>
           <div class="forecast-result" id="forecastResult">
             <div class="result-title">Forecast Analysis</div>
             <div class="result-text" id="forecastText"></div>
@@ -1061,6 +1141,12 @@
         </div>
       </div>
     </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+      Powered by <a href="#" class="footer-link">SalesHero Solutions</a>
+    </footer>
   </div>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js"></script>
