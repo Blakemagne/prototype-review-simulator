@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Review Rating Analyzer</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -15,6 +15,8 @@
       color: #1a1a1a;
       line-height: 1.6;
       min-height: 100vh;
+      -webkit-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased;
     }
     
     /* Onboarding Screen */
@@ -27,10 +29,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 40px 20px;
+      padding: 20px;
       background: linear-gradient(135deg, #9f1239 0%, #d60000 50%, #f64002 100%);
       z-index: 1000;
-      color: #333; /* Ensure text color is set for all child elements */
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
     
     .onboarding-card {
@@ -41,7 +44,8 @@
       max-width: 600px;
       width: 100%;
       text-align: center;
-      color: #333; /* Explicitly set text color */
+      color: #333;
+      margin: auto;
     }
     
     .logo {
@@ -68,12 +72,12 @@
     .features-list {
       text-align: left;
       margin: 32px 0;
-      color: #333; /* Ensure feature text is visible */
+      color: #333;
     }
     
     .feature-item {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 12px;
       margin-bottom: 16px;
       font-size: 16px;
@@ -82,6 +86,7 @@
     .feature-check {
       color: #4caf50;
       font-size: 20px;
+      flex-shrink: 0;
     }
     
     .button-group {
@@ -103,6 +108,9 @@
       align-items: center;
       justify-content: center;
       gap: 12px;
+      -webkit-tap-highlight-color: transparent;
+      text-decoration: none;
+      user-select: none;
     }
     
     .connect-btn {
@@ -116,6 +124,10 @@
       box-shadow: 0 4px 12px rgba(214, 0, 0, 0.3);
     }
     
+    .connect-btn:active {
+      transform: translateY(0);
+    }
+    
     .demo-btn {
       background: #f8f9fa;
       color: #666;
@@ -125,6 +137,125 @@
     .demo-btn:hover {
       background: #e0e0e0;
       border-color: #ccc;
+    }
+    
+    .demo-btn:active {
+      background: #d0d0d0;
+    }
+    
+    /* Mobile Styles for Onboarding */
+    @media (max-width: 768px) {
+      .onboarding-screen {
+        padding: 16px;
+      }
+      
+      .onboarding-card {
+        padding: 32px 24px;
+        border-radius: 12px;
+      }
+      
+      .logo {
+        font-size: 56px;
+        margin-bottom: 20px;
+      }
+      
+      .app-title {
+        font-size: 28px;
+        margin-bottom: 12px;
+      }
+      
+      .app-subtitle {
+        font-size: 16px;
+        margin-bottom: 24px;
+        line-height: 1.4;
+      }
+      
+      .features-list {
+        margin: 24px 0;
+      }
+      
+      .feature-item {
+        font-size: 14px;
+        margin-bottom: 14px;
+        gap: 10px;
+      }
+      
+      .feature-check {
+        font-size: 18px;
+      }
+      
+      .button-group {
+        gap: 12px;
+        margin-top: 24px;
+      }
+      
+      .connect-btn, .demo-btn {
+        padding: 14px 24px;
+        font-size: 15px;
+        gap: 10px;
+      }
+      
+      .connect-btn svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .onboarding-card {
+        padding: 24px 20px;
+      }
+      
+      .logo {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+      
+      .app-title {
+        font-size: 24px;
+      }
+      
+      .app-subtitle {
+        font-size: 15px;
+      }
+      
+      .feature-item {
+        font-size: 13px;
+        margin-bottom: 12px;
+      }
+    }
+    
+    /* Small height devices (landscape phones) */
+    @media (max-height: 600px) {
+      .onboarding-card {
+        padding: 24px;
+      }
+      
+      .logo {
+        font-size: 48px;
+        margin-bottom: 12px;
+      }
+      
+      .app-title {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+      
+      .app-subtitle {
+        margin-bottom: 16px;
+      }
+      
+      .features-list {
+        margin: 16px 0;
+      }
+      
+      .feature-item {
+        margin-bottom: 10px;
+      }
+      
+      .button-group {
+        margin-top: 16px;
+      }
     }
     
     /* Main App */
@@ -149,6 +280,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
     }
     
     .header h1 {
@@ -184,10 +317,15 @@
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
     
     .exit-btn:hover {
       background: #b50000;
+    }
+    
+    .exit-btn:active {
+      background: #a00000;
     }
     
     /* Stats Grid */
@@ -273,12 +411,17 @@
       font-size: 14px;
       cursor: pointer;
       transition: all 0.3s;
+      -webkit-tap-highlight-color: transparent;
     }
     
     .time-btn.active {
       background: #d60000;
       color: white;
       border-color: #d60000;
+    }
+    
+    .time-btn:active {
+      transform: scale(0.95);
     }
     
     /* Simulator Section */
@@ -294,6 +437,7 @@
       align-items: center;
       gap: 12px;
       margin-bottom: 24px;
+      flex-wrap: wrap;
     }
     
     .scale-selector label {
@@ -307,6 +451,7 @@
       border: 1px solid #ddd;
       border-radius: 6px;
       cursor: pointer;
+      background: #fff;
     }
     
     /* Slider Group */
@@ -333,11 +478,9 @@
     }
     
     input[type=range] {
-      /* Reset appearance */
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
-      
       width: 100%;
       height: 6px;
       background: #e0e0e0;
@@ -348,7 +491,6 @@
       border: none;
     }
     
-    /* Firefox */
     input[type=range]::-moz-range-track {
       width: 100%;
       height: 6px;
@@ -357,7 +499,6 @@
       border: none;
     }
     
-    /* WebKit/Blink */
     input[type=range]::-webkit-slider-runnable-track {
       width: 100%;
       height: 6px;
@@ -367,18 +508,16 @@
     }
     
     input[type=range]::-webkit-slider-thumb {
-      /* Reset appearance */
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
-      
       width: 18px;
       height: 18px;
       background: linear-gradient(135deg, #d60000 0%, #f64002 100%);
       border: 2px solid #fff;
       border-radius: 50%;
       cursor: pointer;
-      margin-top: -6px; /* Centers thumb on the track */
+      margin-top: -6px;
       box-shadow: 0 2px 4px rgba(214, 0, 0, 0.3);
       transition: transform 0.1s ease, box-shadow 0.1s ease;
     }
@@ -399,6 +538,7 @@
       border: 1px solid #ddd;
       border-radius: 6px;
       text-align: center;
+      background: #fff;
     }
     
     .bar {
@@ -432,59 +572,43 @@
       font-size: 12px;
       font-weight: 600;
     }
-   
-  /* Onboarding Screen */
-  .onboarding-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, #d60000 0%, #f64002 100%);
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    transition: opacity 0.3s ease-in-out;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-  
-  /* Info box styles */
-  .info-box {
-    position: relative;
-    margin-bottom: 16px;
-    padding: 12px;
-    padding-right: 36px;
-    background: #e8f4f8;
-    border-radius: 6px;
-    font-size: 13px;
-    color: #1a73e8;
-    display: block;
-  }
-  
-  .info-box.hidden {
-    display: none;
-  }
-  
-  .info-box-close {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: none;
-    border: none;
-    font-size: 16px;
-    color: #1a73e8;
-    cursor: pointer;
-    padding: 4px 8px;
-    line-height: 1;
-    opacity: 0.7;
-  }
-  
-  .info-box-close:hover {
-    opacity: 1;
-  }
+    
+    /* Info box styles */
+    .info-box {
+      position: relative;
+      margin-bottom: 16px;
+      padding: 12px;
+      padding-right: 36px;
+      background: #e8f4f8;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #1a73e8;
+      display: block;
+    }
+    
+    .info-box.hidden {
+      display: none;
+    }
+    
+    .info-box-close {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: none;
+      border: none;
+      font-size: 16px;
+      color: #1a73e8;
+      cursor: pointer;
+      padding: 4px 8px;
+      line-height: 1;
+      opacity: 0.7;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .info-box-close:hover {
+      opacity: 1;
+    }
+    
     /* Forecast Section */
     .forecast-section {
       margin-top: 24px;
@@ -517,6 +641,7 @@
       border-radius: 8px;
       font-size: 16px;
       transition: border-color 0.3s;
+      background: #fff;
     }
     
     .input-field:focus {
@@ -535,12 +660,17 @@
       font-weight: 500;
       cursor: pointer;
       transition: all 0.3s;
+      -webkit-tap-highlight-color: transparent;
     }
     
     .forecast-btn:hover {
       background: #b50000;
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(214, 0, 0, 0.3);
+    }
+    
+    .forecast-btn:active {
+      transform: translateY(0);
     }
     
     .forecast-result {
@@ -578,6 +708,201 @@
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
+    }
+    
+    /* Mobile Optimizations for Main App */
+    @media (max-width: 768px) {
+      .main-app {
+        padding: 12px;
+      }
+      
+      .header {
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+      }
+      
+      .header h1 {
+        font-size: 22px;
+      }
+      
+      .header-right {
+        gap: 12px;
+      }
+      
+      .demo-badge {
+        font-size: 11px;
+        padding: 4px 10px;
+      }
+      
+      .exit-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      
+      .stat-card {
+        padding: 16px;
+      }
+      
+      .stat-value {
+        font-size: 26px;
+      }
+      
+      .stat-label {
+        font-size: 12px;
+      }
+      
+      .main-grid {
+        gap: 16px;
+      }
+      
+      .card {
+        padding: 20px;
+        border-radius: 8px;
+      }
+      
+      .card h2 {
+        font-size: 18px;
+        margin-bottom: 16px;
+      }
+      
+      #chart-container {
+        height: 300px;
+        padding: 12px;
+      }
+      
+      .time-controls {
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+      
+      .time-btn {
+        padding: 4px 8px;
+        font-size: 12px;
+      }
+      
+      .scale-selector {
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      
+      .scale-selector select {
+        padding: 6px 10px;
+        font-size: 13px;
+      }
+      
+      .slider-group {
+        padding: 12px 0;
+      }
+      
+      .slider-row {
+        grid-template-columns: 50px 1fr 60px;
+        gap: 12px;
+      }
+      
+      input[type=number] {
+        padding: 6px;
+        font-size: 13px;
+      }
+      
+      .info-box {
+        font-size: 12px;
+        padding: 10px;
+        padding-right: 32px;
+      }
+      
+      .forecast-section h3 {
+        font-size: 16px;
+        margin-bottom: 12px;
+      }
+      
+      .forecast-inputs {
+        gap: 12px;
+      }
+      
+      .input-label {
+        font-size: 13px;
+      }
+      
+      .input-field {
+        padding: 8px 12px;
+        font-size: 15px;
+      }
+      
+      .forecast-btn {
+        padding: 10px;
+        font-size: 15px;
+      }
+      
+      .forecast-result {
+        padding: 16px;
+      }
+      
+      .result-title {
+        font-size: 16px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .header {
+        padding: 12px 16px;
+      }
+      
+      .header h1 {
+        font-size: 20px;
+      }
+      
+      .scale-selector span {
+        width: 100%;
+        text-align: left;
+        font-size: 13px;
+      }
+      
+      .forecast-inputs {
+        grid-template-columns: 1fr;
+      }
+      
+      .slider-row {
+        grid-template-columns: 40px 1fr 50px;
+        gap: 8px;
+      }
+      
+      .slider-row label {
+        font-size: 14px;
+      }
+      
+      #chart-container {
+        height: 250px;
+      }
+      
+      /* Touch-friendly slider thumb */
+      input[type=range]::-webkit-slider-thumb {
+        width: 24px;
+        height: 24px;
+        margin-top: -9px;
+      }
+      
+      input[type=range]::-moz-range-thumb {
+        width: 24px;
+        height: 24px;
+      }
+    }
+    
+    /* Prevent body scroll when modal is open */
+    body.modal-open {
+      overflow: hidden;
+      position: fixed;
+      width: 100%;
     }
   </style>
 </head>
@@ -673,7 +998,7 @@
         </div>
         
         <div style="margin-top: 20px; padding: 16px; background: #f8f9fa; border-radius: 8px; font-size: 14px; line-height: 1.6;">
-          <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 12px;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;">
             <span style="font-size: 20px;">💡</span>
             <div>
               <strong>How this works:</strong><br>
@@ -761,6 +1086,7 @@
       document.getElementById('onboardingScreen').style.display = 'none';
       document.getElementById('mainApp').classList.add('active');
       document.getElementById('demoBadge').style.display = 'block';
+      document.body.classList.remove('modal-open');
       
       // Generate demo data
       reviewData = generateDemoData();
@@ -1175,7 +1501,13 @@
           plugins: {
             legend: {
               display: true,
-              position: 'top'
+              position: 'top',
+              labels: {
+                boxWidth: window.innerWidth < 768 ? 12 : 15,
+                font: {
+                  size: window.innerWidth < 768 ? 11 : 12
+                }
+              }
             },
             tooltip: {
               callbacks: {
@@ -1198,12 +1530,18 @@
               max: xMax,
               title: {
                 display: true,
-                text: 'Days from Today'
+                text: 'Days from Today',
+                font: {
+                  size: window.innerWidth < 768 ? 11 : 12
+                }
               },
               ticks: {
                 callback: function(value) {
                   if (value === 0) return 'Today';
                   return value > 0 ? `+${value}d` : `${value}d`;
+                },
+                font: {
+                  size: window.innerWidth < 768 ? 10 : 11
                 }
               },
               grid: {
@@ -1220,12 +1558,18 @@
               max: 5.5,
               title: {
                 display: true,
-                text: 'Rating'
+                text: 'Rating',
+                font: {
+                  size: window.innerWidth < 768 ? 11 : 12
+                }
               },
               ticks: {
                 stepSize: 1,
                 callback: function(value) {
                   return value + '★';
+                },
+                font: {
+                  size: window.innerWidth < 768 ? 10 : 11
                 }
               }
             }
@@ -1473,6 +1817,7 @@
       textDiv.innerHTML = html;
       resultDiv.style.display = 'block';
     }
+    
     // Handle info box close button
     document.addEventListener('DOMContentLoaded', function() {
       const infoBox = document.getElementById('infoBox');
@@ -1488,6 +1833,26 @@
         infoBox.classList.add('hidden');
         localStorage.setItem('infoBoxDismissed', 'true');
       });
+      
+      // Add body class for modal state
+      if (document.getElementById('onboardingScreen').style.display !== 'none') {
+        document.body.classList.add('modal-open');
+      }
+    });
+    
+    // Handle window resize for chart font sizes
+    window.addEventListener('resize', function() {
+      if (chart) {
+        // Update font sizes based on window width
+        const isMobile = window.innerWidth < 768;
+        chart.options.plugins.legend.labels.font.size = isMobile ? 11 : 12;
+        chart.options.plugins.legend.labels.boxWidth = isMobile ? 12 : 15;
+        chart.options.scales.x.title.font.size = isMobile ? 11 : 12;
+        chart.options.scales.x.ticks.font.size = isMobile ? 10 : 11;
+        chart.options.scales.y.title.font.size = isMobile ? 11 : 12;
+        chart.options.scales.y.ticks.font.size = isMobile ? 10 : 11;
+        chart.update();
+      }
     });
   </script>
 </body>
