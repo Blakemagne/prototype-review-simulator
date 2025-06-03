@@ -47,6 +47,26 @@
       text-align: center;
       color: #333;
       margin: auto;
+      cursor: grab;
+      position: relative;
+      animation: subtleDance 6s ease-in-out infinite;
+      transition: transform 0.1s ease-out;
+    }
+    
+    .onboarding-card:active {
+      cursor: grabbing;
+      animation: none;
+    }
+    
+    .onboarding-card.returning {
+      transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    
+    @keyframes subtleDance {
+      0%, 100% { transform: rotate(-1deg) translateY(0px); }
+      25% { transform: rotate(1deg) translateY(-5px); }
+      50% { transform: rotate(-0.5deg) translateY(0px); }
+      75% { transform: rotate(0.5deg) translateY(-3px); }
     }
     
     .logo {
@@ -58,10 +78,18 @@
       font-size: 36px;
       font-weight: 700;
       margin-bottom: 16px;
-      background: linear-gradient(135deg, #d60000 0%, #f64002 100%);
+      background: linear-gradient(135deg, #9f1239 0%, #d60000 25%, #f64002 50%, #ff9393 75%, #9f1239 100%);
+      background-size: 400% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      animation: gradientFlow 4s ease-in-out infinite;
+    }
+    
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
     
     .app-subtitle {
@@ -115,14 +143,14 @@
     }
     
     .connect-btn {
-      background: #d60000;
+      background: #4285f4;
       color: white;
     }
     
     .connect-btn:hover {
-      background: #b50000;
+      background: #357ae8;
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(214, 0, 0, 0.3);
+      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
     }
     
     .connect-btn:active {
@@ -154,6 +182,7 @@
       .onboarding-card {
         padding: 32px 24px;
         border-radius: 12px;
+        animation: subtleDance 6s ease-in-out infinite;
       }
       
       .logo {
@@ -164,6 +193,7 @@
       .app-title {
         font-size: 28px;
         margin-bottom: 12px;
+        background-size: 400% 100%;
       }
       
       .app-subtitle {
@@ -366,10 +396,7 @@
     .stat-value {
       font-size: 32px;
       font-weight: 700;
-      background: linear-gradient(135deg, #d60000 0%, #f64002 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: #1a1a1a;
       margin-bottom: 4px;
     }
     
@@ -810,12 +837,19 @@
         margin-bottom: 16px;
       }
       
+      @media (max-width: 768px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      
       .stat-card {
         padding: 16px;
       }
       
       .stat-value {
         font-size: 26px;
+        color: #1a1a1a;
       }
       
       .stat-label {
@@ -926,7 +960,7 @@
     
     @media (max-width: 480px) {
       .stats-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
       }
       
       .header {
@@ -954,6 +988,15 @@
       
       .slider-row label {
         font-size: 14px;
+      }
+      
+      .stat-value {
+        font-size: 22px;
+        color: #1a1a1a;
+      }
+      
+      .stat-label {
+        font-size: 11px;
       }
       
       #chart-container {
@@ -1052,8 +1095,8 @@
         <div class="stat-label">Average Rating</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value" id="simulatedAvg">0.0</div>
-        <div class="stat-label">Future Ratings (Simulated) Average</div>
+        <div class="stat-value" id="futureTotal">0</div>
+        <div class="stat-label">Future (Simulated) Reviews</div>
       </div>
       <div class="stat-card">
         <div class="stat-value" id="projectedAvg">0.0</div>
@@ -1108,7 +1151,7 @@
             <option value="5000">Up to 5,000</option>
           </select>
           <span style="margin-left: auto; color: #666; font-size: 14px;">
-            Future reviews: <span id="futureTotal">0</span>
+            Simulated average: <span id="simulatedAvg">0.0★</span>
           </span>
         </div>
         
@@ -1436,7 +1479,12 @@
     // Update distribution bars
     function updateDistribution() {
       const total = Object.values(sliderCounts).reduce((a, b) => a + b, 0) || 1;
-      document.getElementById('futureTotal').textContent = total;
+      
+      // Update simulated average in the scale selector
+      const simSum = Object.entries(sliderCounts).reduce((sum, [star, count]) => 
+        sum + (parseInt(star) * count), 0);
+      const simAvg = total > 1 ? (simSum / total).toFixed(2) : '0.00';
+      document.getElementById('simulatedAvg').textContent = simAvg + '★';
       
       for (let star = 1; star <= 5; star++) {
         const count = sliderCounts[star];
@@ -1511,6 +1559,7 @@
         sum + (parseInt(star) * count), 0);
       const simAvg = simTotal > 0 ? (simSum / simTotal).toFixed(2) : '0.00';
       
+      document.getElementById('futureTotal').textContent = simTotal;
       document.getElementById('simulatedAvg').textContent = simAvg + '★';
       
       // Projected stats (current + simulated)
@@ -1930,6 +1979,88 @@
       // Add body class for modal state
       if (document.getElementById('onboardingScreen').style.display !== 'none') {
         document.body.classList.add('modal-open');
+      }
+      
+      // Draggable onboarding card functionality
+      const card = document.querySelector('.onboarding-card');
+      let isDragging = false;
+      let startX, startY;
+      let currentX = 0, currentY = 0;
+      let cardRect;
+      
+      card.addEventListener('mousedown', startDrag);
+      card.addEventListener('touchstart', startDrag, { passive: false });
+      
+      function startDrag(e) {
+        // Don't start drag if clicking on buttons or links
+        if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || 
+            e.target.closest('button') || e.target.closest('a')) {
+          return;
+        }
+        
+        isDragging = true;
+        card.classList.remove('returning');
+        cardRect = card.getBoundingClientRect();
+        
+        if (e.type === 'touchstart') {
+          startX = e.touches[0].clientX - currentX;
+          startY = e.touches[0].clientY - currentY;
+        } else {
+          startX = e.clientX - currentX;
+          startY = e.clientY - currentY;
+        }
+        
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag, { passive: false });
+        document.addEventListener('mouseup', stopDrag);
+        document.addEventListener('touchend', stopDrag);
+        
+        e.preventDefault();
+      }
+      
+      function drag(e) {
+        if (!isDragging) return;
+        
+        e.preventDefault();
+        
+        let clientX, clientY;
+        if (e.type === 'touchmove') {
+          clientX = e.touches[0].clientX;
+          clientY = e.touches[0].clientY;
+        } else {
+          clientX = e.clientX;
+          clientY = e.clientY;
+        }
+        
+        currentX = clientX - startX;
+        currentY = clientY - startY;
+        
+        // Limit the drag distance
+        const maxDistance = 150;
+        const distance = Math.sqrt(currentX * currentX + currentY * currentY);
+        if (distance > maxDistance) {
+          currentX = (currentX / distance) * maxDistance;
+          currentY = (currentY / distance) * maxDistance;
+        }
+        
+        card.style.transform = `translate(${currentX}px, ${currentY}px)`;
+      }
+      
+      function stopDrag() {
+        if (!isDragging) return;
+        
+        isDragging = false;
+        card.classList.add('returning');
+        
+        // Animate back to center
+        currentX = 0;
+        currentY = 0;
+        card.style.transform = 'translate(0, 0)';
+        
+        document.removeEventListener('mousemove', drag);
+        document.removeEventListener('touchmove', drag);
+        document.removeEventListener('mouseup', stopDrag);
+        document.removeEventListener('touchend', stopDrag);
       }
     });
     
